@@ -11,14 +11,17 @@ CONFIG += c++17
 SOURCES += \
     gematria.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    queryalldialog.cpp
 
 HEADERS += \
     gematria.h \
-    mainwindow.h
+    mainwindow.h \
+    queryalldialog.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    queryalldialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -37,6 +37,24 @@
      </layout>
     </item>
     <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QLabel" name="gematriaLabel">
+        <property name="text">
+         <string>Gematria: </string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="gematriaNumberLabel">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
      <widget class="QListView" name="listView"/>
     </item>
    </layout>
@@ -55,6 +73,10 @@
      <string>File</string>
     </property>
     <addaction name="actionNew_Gematria_String"/>
+    <addaction name="actionInsert_Gematria_List"/>
+    <addaction name="separator"/>
+    <addaction name="actionQuery_All"/>
+    <addaction name="actionSearch_By_Number"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
@@ -62,6 +84,21 @@
   <action name="actionNew_Gematria_String">
    <property name="text">
     <string>New Gematria String</string>
+   </property>
+  </action>
+  <action name="actionQuery_All">
+   <property name="text">
+    <string>Query All</string>
+   </property>
+  </action>
+  <action name="actionInsert_Gematria_List">
+   <property name="text">
+    <string>Insert Gematria List</string>
+   </property>
+  </action>
+  <action name="actionSearch_By_Number">
+   <property name="text">
+    <string>Search By Number</string>
    </property>
   </action>
  </widget>

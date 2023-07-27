@@ -19,16 +19,22 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    QSqlDatabase db;
 
 
 private slots:
-    void on_actionNew_Gematria_String_triggered();
+    void actionNew_Gematria_String_triggered();
 
     void searchButton_clicked();
 
+    void actionQuery_All_triggered();
+
+    void actionInsert_Gematria_List_triggered();
+
+    void actionSearch_By_Number_triggered();
+
 private:
     Ui::MainWindow *ui;
-    QSqlDatabase db;
     QSqlQueryModel* tabelModel = nullptr;
 
     void setUpDB();
