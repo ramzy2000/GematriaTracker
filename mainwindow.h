@@ -31,9 +31,11 @@ private slots:
 
     void actionInsert_Gematria_List_triggered();
 
-    void actionSearch_By_Number_triggered();
-
     void on_searchLineEdit_returnPressed();
+
+    void on_saveButton_clicked();
+
+    void on_clearButton_clicked();
 
 private:
     Ui::MainWindow *ui;

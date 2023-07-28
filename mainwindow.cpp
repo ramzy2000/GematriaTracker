@@ -6,9 +6,10 @@
 #include <QFileDialog>
 #include <QFile>
 #include <QTextStream>
-
 #include "gematria.h"
 #include <QAction>
+#include <QSqlRecord>
+#include <QSqlField>
 #include "queryalldialog.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -45,7 +46,6 @@ void MainWindow::prepUI()
     connect(ui->actionNew_Gematria_String, &QAction::triggered, this, &MainWindow::actionNew_Gematria_String_triggered);
     connect(ui->actionQuery_All, &QAction::triggered, this, &MainWindow::actionQuery_All_triggered);
     connect(ui->actionInsert_Gematria_List, &QAction::triggered, this, &MainWindow::actionInsert_Gematria_List_triggered);
-    connect(ui->actionSearch_By_Number, &QAction::triggered, this, &MainWindow::actionSearch_By_Number_triggered);
 }
 
 void MainWindow::searchDB()
@@ -54,16 +54,26 @@ void MainWindow::searchDB()
     QString searchedString = ui->searchLineEdit->text();
     if(searchedString.isEmpty())
         return;
-    searchedString = searchedString.toLower();
 
-    // get the gematria number
-    quint64 gematria = getGematria(searchedString);
+    // check if the string is a integer
+    bool ok = false;
+    quint64 gematria = 0;
+    quint64 number =  searchedString.toInt(&ok);
+    if(ok)
+    {
+        gematria = number;
+    }
+    else
+    {
+        searchedString = searchedString.toLower();
+        gematria = getGematria(searchedString);
+    }
 
-    QSqlQueryModel* query = new QSqlQueryModel(this);
-    query->setQuery("SELECT gematriaString FROM GematriaNumbers WHERE gematriaNumber = " + QString::number(gematria) + ";");
+    tabelModel = new QSqlQueryModel(this);
+    tabelModel->setQuery("SELECT gematriaString FROM GematriaNumbers WHERE gematriaNumber = " + QString::number(gematria) + ";");
 
     // query a list of words in the db that have the same gematria.
-    ui->listView->setModel(query);
+    ui->listView->setModel(tabelModel);
     ui->gematriaNumberLabel->setText(QString::number(gematria));
 }
 
@@ -171,22 +181,60 @@ void MainWindow::actionInsert_Gematria_List_triggered()
     }
 }
 
-void MainWindow::actionSearch_By_Number_triggered()
-{
-    qDebug() << "Hello";
-    quint64 gematria = QInputDialog::getInt(this, "", "Enter Gematria: ", 0, 1);
-    if(gematria > 0)
-    {
-        QSqlQueryModel* query = new QSqlQueryModel(this);
-        query->setQuery("SELECT gematriaString FROM GematriaNumbers WHERE gematriaNumber = " + QString::number(gematria) + ";");
-        ui->listView->setModel(query);
-        ui->gematriaNumberLabel->setText(QString::number(gematria));
-    }
-}
-
 
 void MainWindow::on_searchLineEdit_returnPressed()
 {
     this->searchDB();
+}
+
+
+void MainWindow::on_saveButton_clicked()
+{
+    // check if model data exists
+    if(tabelModel == nullptr)
+        return;
+
+    // check if model data is populated
+    if(tabelModel->rowCount() < 1)
+        return;
+
+    QString fileName = QFileDialog::getSaveFileName(this, "", "Save File");
+
+    if(fileName.isEmpty())
+        return;
+
+    // save the file with the current data in the GUI.
+    QFile file(fileName);
+    if(file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        QTextStream out(&file);
+
+        out << "Searched: " << ui->searchLineEdit->text() << '\n';
+        out << "Gematria: " << ui->gematriaNumberLabel->text() << '\n';
+        out << '\n';
+        out << '\n';
+
+        for(int i = 0; i < tabelModel->rowCount(); i++)
+        {
+            QSqlRecord record = tabelModel->record(i);
+            QSqlField field = record.field(0);
+            QVariant value = field.value();
+            out << value.toString() << '\n';
+        }
+
+        file.close();
+    }
+}
+
+
+void MainWindow::on_clearButton_clicked()
+{
+    // clear the search bar
+    ui->searchLineEdit->clear();
+
+    // clear the model data
+    this->tabelModel->clear();
+
+    ui->gematriaNumberLabel->clear();
 }
 
