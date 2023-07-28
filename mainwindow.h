@@ -33,6 +33,8 @@ private slots:
 
     void actionSearch_By_Number_triggered();
 
+    void on_searchLineEdit_returnPressed();
+
 private:
     Ui::MainWindow *ui;
     QSqlQueryModel* tabelModel = nullptr;
@@ -42,6 +44,8 @@ private:
     void createGematriaTabel();
 
     void prepUI();
+
+    void searchDB();
 
     bool isInDB(QString str);
 

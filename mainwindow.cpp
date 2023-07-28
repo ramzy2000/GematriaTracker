@@ -48,6 +48,25 @@ void MainWindow::prepUI()
     connect(ui->actionSearch_By_Number, &QAction::triggered, this, &MainWindow::actionSearch_By_Number_triggered);
 }
 
+void MainWindow::searchDB()
+{
+    // capture whats in the search bar
+    QString searchedString = ui->searchLineEdit->text();
+    if(searchedString.isEmpty())
+        return;
+    searchedString = searchedString.toLower();
+
+    // get the gematria number
+    quint64 gematria = getGematria(searchedString);
+
+    QSqlQueryModel* query = new QSqlQueryModel(this);
+    query->setQuery("SELECT gematriaString FROM GematriaNumbers WHERE gematriaNumber = " + QString::number(gematria) + ";");
+
+    // query a list of words in the db that have the same gematria.
+    ui->listView->setModel(query);
+    ui->gematriaNumberLabel->setText(QString::number(gematria));
+}
+
 MainWindow::~MainWindow()
 {
     delete ui;
@@ -110,21 +129,7 @@ void MainWindow::actionNew_Gematria_String_triggered()
 
 void MainWindow::searchButton_clicked()
 {
-    // capture whats in the search bar
-    QString searchedString = ui->searchLineEdit->text();
-    if(searchedString.isEmpty())
-        return;
-    searchedString = searchedString.toLower();
-
-    // get the gematria number
-    quint64 gematria = getGematria(searchedString);
-
-    QSqlQueryModel* query = new QSqlQueryModel(this);
-    query->setQuery("SELECT gematriaString FROM GematriaNumbers WHERE gematriaNumber = " + QString::number(gematria) + ";");
-
-    // query a list of words in the db that have the same gematria.
-    ui->listView->setModel(query);
-    ui->gematriaNumberLabel->setText(QString::number(gematria));
+    this->searchDB();
 }
 
 void MainWindow::actionQuery_All_triggered()
@@ -177,5 +182,11 @@ void MainWindow::actionSearch_By_Number_triggered()
         ui->listView->setModel(query);
         ui->gematriaNumberLabel->setText(QString::number(gematria));
     }
+}
+
+
+void MainWindow::on_searchLineEdit_returnPressed()
+{
+    this->searchDB();
 }
 
