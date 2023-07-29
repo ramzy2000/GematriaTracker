@@ -6,17 +6,18 @@
 #include <QFileDialog>
 #include <QFile>
 #include <QTextStream>
-#include "gematria.h"
 #include <QAction>
 #include <QSqlRecord>
 #include <QSqlField>
 #include "queryalldialog.h"
+#include "gematria.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    this->setWindowTitle("Gematria Tracker");
     prepUI();
     setUpDB();
 }
@@ -229,6 +230,9 @@ void MainWindow::on_saveButton_clicked()
 
 void MainWindow::on_clearButton_clicked()
 {
+    if(!tabelModel)
+        return;
+
     // clear the search bar
     ui->searchLineEdit->clear();
 

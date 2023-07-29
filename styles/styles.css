@@ -1,0 +1,24 @@
+* {
+    background-color : #e3e3e1;
+    color : black;
+}
+
+QListView, QPushButton, QLineEdit, QTabelView {
+    background-color : white;
+}
+
+QPushButton {
+    font-size : 14pt;
+}
+
+QLabel, QLineEdit, QListView {
+    font-size : 16pt;
+}
+
+QLabel#infoLabel {
+   font-size : 20pt;
+}
+
+QGroupBox {
+    border : 1px solid #b3b3b3;
+}
