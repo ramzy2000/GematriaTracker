@@ -9,6 +9,7 @@
 #include <QAction>
 #include <QSqlRecord>
 #include <QSqlField>
+#include <QProcess>
 #include "queryalldialog.h"
 #include "gematria.h"
 
@@ -240,5 +241,24 @@ void MainWindow::on_clearButton_clicked()
     this->tabelModel->clear();
 
     ui->gematriaNumberLabel->clear();
+}
+
+
+void MainWindow::on_lookupButton_clicked()
+{
+    // grab the current selected item data from the ui objest listView object
+
+    if(ui->listView->currentIndex().row() < 0)
+        return;
+    QSqlRecord record = tabelModel->record(ui->listView->currentIndex().row());
+    QSqlField field = record.field(0);
+    QVariant value = field.value();
+    QString wordToSearch = value.toString();
+    QString commandPrefix = "https://www.merriam-webster.com/dictionary/";
+    QString command = "start msedge " + commandPrefix + wordToSearch;
+    qDebug() << command;
+
+    // use the system to open edge
+    std::system(command.toLatin1());
 }
 
