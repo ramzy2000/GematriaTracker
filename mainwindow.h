@@ -39,6 +39,8 @@ private slots:
 
     void on_lookupButton_clicked();
 
+    void on_eptymologyButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     QSqlQueryModel* tabelModel = nullptr;

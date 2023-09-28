@@ -262,3 +262,22 @@ void MainWindow::on_lookupButton_clicked()
     std::system(command.toLatin1());
 }
 
+
+void MainWindow::on_eptymologyButton_clicked()
+{
+    // grab the current selected item data from the ui objest listView object
+
+    if(ui->listView->currentIndex().row() < 0)
+        return;
+    QSqlRecord record = tabelModel->record(ui->listView->currentIndex().row());
+    QSqlField field = record.field(0);
+    QVariant value = field.value();
+    QString wordToSearch = value.toString();
+    QString commandPrefix = "https://www.etymonline.com/search?q=";
+    QString command = "start msedge " + commandPrefix + wordToSearch;
+    qDebug() << command;
+
+    // use the system to open edge
+    std::system(command.toLatin1());
+}
+

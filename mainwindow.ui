@@ -129,6 +129,13 @@
             </widget>
            </item>
            <item>
+            <widget class="QPushButton" name="etymologyButton">
+             <property name="text">
+              <string>Etymology</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <spacer name="verticalSpacer">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
